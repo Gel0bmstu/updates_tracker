@@ -13,13 +13,8 @@ import shutil
 import argparse
 from flask import Flask, jsonify, request, Response
 
-<<<<<<< Updated upstream
-github_headers = {'User-Agent': 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.2171.95 Safari/537.36',
-                  'Authorization': 'token {}'.format(os.getenv('GITHUB_TOKEN'))}
-=======
 home = os.environ.get('HOME')
 project_version = 'master'
->>>>>>> Stashed changes
 
 # Marshal http(s) response to JSON 
 
@@ -298,56 +293,6 @@ class PackageWorker:
         split_url = upstream_url.split("/")[:-1]
         project_url = '/'.join(split_url[:6]) + '/'
         try:
-<<<<<<< Updated upstream
-            pkg_notcare = re.compile(package+'[-]([\d.]*\d+)', re.IGNORECASE)
-            category_match = re.finditer(
-                pkg_notcare, req.content.decode('utf-8'))
-            for match in category_match:
-                version_list.append(match[1])
-            upstream_max_version = max(
-                [[int(j) for j in i.split(".")] for i in version_list])
-            upstream_version = ".".join([str(i) for i in upstream_max_version])
-            print(upstream_version, project_url)
-            return upstream_version, project_url
-        except:
-            category_match = re.finditer(
-                'href=[\'"]?([\d.]*\d+)', req.content.decode('utf-8'))
-            for match in category_match:
-                version_list.append(match[1])
-            upstream_max_version = max(
-                [[int(j) for j in i.split(".")] for i in version_list])
-            upstream_version = ".".join([str(i) for i in upstream_max_version])
-            print(upstream_version, project_url)
-            return upstream_version, project_url
-
-
-# add here https://download.kde.org/stable/frameworks/
-
-
-def check_version(package):
-    print('checking Rosa-2019.1 ingit version for package [{}]'.format(package))
-    url = "https://abf.io/import/{package}/raw/rosa2019.1/{package}.spec".format(package=package)
-    resp = requests.get(url, headers=headers)
-    temp = tempfile.NamedTemporaryFile(prefix=package, suffix=".spec")
-    if resp.status_code == 404:
-        print('requested package [{}] not found'.format(package))
-    if resp.status_code == 200:
-        spec = resp.content
-        try:
-            spec_path = temp.name
-            # print("Created file is:", temp)
-            # print("Name of the file is:", temp.name)
-            temp.write(spec)
-            temp.seek(0)
-            get_nvs(spec_path)
-            name = nvs[0]
-            version = nvs[1]
-            source = nvs[2]
-            source0 = nvs[3]
-            #print(name, version, source, source0)
-            nvss.extend([name, version, source, source0])
-            return name, version, source, source0
-=======
             apibase = 'https://api.github.com/repos' + '/' + \
                 split_url[3] + '/' + split_url[4] + '/tags'
             self.api_.logger.debug('Api base url: {}'.format(apibase))
@@ -366,7 +311,6 @@ def check_version(package):
                 upstream_version = category_match.group(0)
 
             return None, upstream_version, project_url
->>>>>>> Stashed changes
         except:
             apibase = 'https://api.github.com/repos' + '/' + \
                 split_url[3] + '/' + split_url[4] + '/releases'
@@ -696,16 +640,6 @@ def check_version(package):
 
         for package in packages:
             # clear lists
-<<<<<<< Updated upstream
-            del nvss[:]
-            del nvs[:]
-            check_version(package)
-            #try:
-            print('update_spec')
-            update_spec(package)
-            #except:
-            #    pass
-=======
             del self.nvss_[:]
             del self.nvs_[:]
 
@@ -749,4 +683,3 @@ def check_version(package):
         self.api_.run(host = self.adress_,port = self.port_, debug=True)
 
 pws = PackageWorker()
->>>>>>> Stashed changes
