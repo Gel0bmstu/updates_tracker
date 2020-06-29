@@ -164,7 +164,7 @@ def any_other(upstream_url, package):
 
 def check_version(package):
     print('checking OpenMandriva ingit version for package [{}]'.format(package))
-    url = "http://github.com/OpenMandrivaAssociation/{package}/raw/master/{package}.spec".format(package=package)
+    url = "https://abf.io/import/{package}/raw/rosa2019.1/{package}.spec".format(package=package)
     resp = requests.get(url, headers=headers)
     temp = tempfile.NamedTemporaryFile(prefix=package, suffix=".spec")
     if resp.status_code == 404:
@@ -556,12 +556,3 @@ if __name__ == '__main__':
             update_spec(package)
             #except:
             #    pass
-
-#update_spec('python-sqlalchemy')
-#check_rust_module('rust-rand')
-#check_upstream('rust-rand')
-#compare_versions('python-sqlalchemy')
-#compare_versions('python-coverage')
-#compare_versions('vim')
-#compare_versions('sway')
-
