@@ -13,7 +13,7 @@ import shutil
 import argparse
 
 github_headers = {'User-Agent': 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.2171.95 Safari/537.36',
-                  'Authorization': 'token github_token'}
+                  'Authorization': 'token {}'.format(os.getenv('GITHUB_TOKEN'))}
 
 
 headers = {'User-Agent': 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.2171.95 Safari/537.36'}
@@ -163,7 +163,7 @@ def any_other(upstream_url, package):
 
 
 def check_version(package):
-    print('checking OpenMandriva ingit version for package [{}]'.format(package))
+    print('checking Rosa-2019.1 ingit version for package [{}]'.format(package))
     url = "https://abf.io/import/{package}/raw/rosa2019.1/{package}.spec".format(package=package)
     resp = requests.get(url, headers=headers)
     temp = tempfile.NamedTemporaryFile(prefix=package, suffix=".spec")
