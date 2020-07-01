@@ -325,6 +325,7 @@ def remove_if_exist(path):
                 return
 
 def clone_repo(package, project_version):
+    print('Clonin repo into {}'.format(home + '/' + package))
     remove_if_exist(home + '/' + package)
     tries = 5
     git_repo = 'https://abf.io/import/{}.git'.format(package)
@@ -345,17 +346,19 @@ def remove_if_exist(path):
     if os.path.exists(path):
         if os.path.isdir(path):
             try:
+                print('Directory {} exist, removing it.'.format(path))
                 subprocess.check_output(
                     ['rm', '-rf', path])
             except subprocess.CalledProcessError as e:
-                print(e.output)
+                print('Unable to remove directory: {}'.format(e.output))
                 return
         if os.path.isfile(path):
             try:
+                print('File {} exist, removing it.'.format(path))
                 subprocess.check_output(
                     ['rm', '-f', path])
             except subprocess.CalledProcessError as e:
-                print(e.output)
+                print('Unable to remove file: {}'.format(e.output))
                 return
 
 def lint_version(version):
