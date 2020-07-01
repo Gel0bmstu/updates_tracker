@@ -370,6 +370,7 @@ def git_commit(message, package):
         subprocess.check_call(['git', 'commit', '-am', '{}'.format(message)], cwd = home + '/' + package)
     except subprocess.CalledProcessError as e:
         print('Unable to commit changes: {}'.format(e.output))
+        remove_if_exist(home + '/' + package)
         sys.exit(1)
 
 
@@ -378,6 +379,7 @@ def git_push(package):
         subprocess.check_call(['git', 'push'], cwd = home + '/' + package)
     except subprocess.CalledProcessError as e:
         print('Unable to push changes: {}'.format(e))
+        remove_if_exist(home + '/' + package)
         sys.exit(1)
 
 
@@ -519,6 +521,7 @@ def run_local_builder(package, project_version, omv_version, upstream_version):
     except Exception as e:
         print_log('local build [{}] failed, omv_version: {} upstream: {}'.format(package, omv_version, upstream_version), 'update.log')
         print(e)
+        remove_if_exist(home + '/' + package)
         sys.exit(1)
     print_log('{} update successfull from {} to {}'.format(package, omv_version, upstream_version), 'update.log')
     return True
