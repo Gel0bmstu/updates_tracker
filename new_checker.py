@@ -325,8 +325,9 @@ def remove_if_exist(path):
                 return
 
 def clone_repo(package, project_version):
-    print('Cloning repo into {}'.format(home + '/' + package))
-    remove_if_exist(home + '/' + package)
+    path_to_package_dir = home + '/' + package
+    print('Cloning repo into {}'.format(path_to_package_dir))
+    remove_if_exist(path_to_package_dir)
     tries = 5
     git_repo = 'https://abf.io/import/{}.git'.format(package)
     for i in range(tries):
