@@ -17,7 +17,7 @@ github_headers = {'User-Agent': 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gec
 
 headers = {'User-Agent': 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.2171.95 Safari/537.36'}
 
-home = os.environ.get('HOME')
+home = '/home/omv'
 project_version = 'rosa2019.1'
 nvs = []
 nvss = []
