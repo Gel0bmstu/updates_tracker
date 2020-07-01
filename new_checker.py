@@ -369,16 +369,16 @@ def git_commit(message, package):
     try:
         subprocess.check_call(['git', 'commit', '-am', '{}'.format(message)], cwd = home + '/' + package)
     except subprocess.CalledProcessError as e:
+        print('Unable to commit changes: {}'.format(e))
         sys.exit(1)
-        print(e)
 
 
 def git_push(package):
     try:
         subprocess.check_call(['git', 'push'], cwd = home + '/' + package)
     except subprocess.CalledProcessError as e:
+        print('Unable to push changes: {}'.format(e))
         sys.exit(1)
-        print(e)
 
 
 def upload_sources(package):
@@ -387,14 +387,14 @@ def upload_sources(package):
     try:
         subprocess.check_call(['abf', 'put'], cwd = home + '/' + package)
     except subprocess.CalledProcessError as e:
-        print_log('uploading sources [{}] failed'.format(package), 'update.log')
+        print_log('uploading sources [{}] failed: {}'.format(package, e), 'update.log')
         print(e)
 
 def abf_build(package):
     try:
         subprocess.check_call(['abf', 'chain_build', '-b', project_version, '--no-cached-chroot', '--auto-publish'], cwd = home + '/' + package)
     except subprocess.CalledProcessError as e:
-        print_log('abf build [{}] failed'.format(package), 'update.log')
+        print_log('abf build [{}] failed: {}'.format(package, e), 'update.log')
         print(e)
         return False
 
