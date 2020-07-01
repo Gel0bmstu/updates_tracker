@@ -15,14 +15,12 @@ import argparse
 github_headers = {'User-Agent': 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.2171.95 Safari/537.36',
                   'Authorization': 'token {}'.format(os.getenv('GITHUB_TOKEN'))}
 
-
 headers = {'User-Agent': 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.2171.95 Safari/537.36'}
 
 home = os.environ.get('HOME')
-project_version = 'master'
+project_version = 'rosa2019.1'
 nvs = []
 nvss = []
-
 
 def get_nvs(spec):
     print('extracting OMV version first')
@@ -73,8 +71,8 @@ def check_python_module(package):
             project_url = data['info']['project_url'][:]
             download_url = data['urls']
             for item in download_url:
-                 if item['python_version'] == 'source':
-                     archive = item['url']
+                if item['python_version'] == 'source':
+                    archive = item['url']
             return upstream_version, project_url, archive
         if module_request == 404:
             # like pycurl
@@ -124,8 +122,6 @@ def repology(package):
     print(repo)
     upstream_version = match['version']
     return upstream_version, repo
-
-
 
 def any_other(upstream_url, package):
     split_url = upstream_url.split("/")[:6]
@@ -331,7 +327,7 @@ def remove_if_exist(path):
 def clone_repo(package, project_version):
     remove_if_exist(home + '/' + package)
     tries = 5
-    git_repo = 'git@github.com:OpenMandrivaAssociation/{}.git'.format(package)
+    git_repo = 'https://abf.io/import/{}.git'.format(package)
     for i in range(tries):
         try:
           print('cloning [{}], branch: [{}] to [{}]'.format(git_repo, project_version, package))
@@ -390,15 +386,13 @@ def upload_sources(package):
         print_log('uploading sources [{}] failed'.format(package), 'update.log')
         print(e)
 
-
 def abf_build(package):
     try:
-        subprocess.check_call(['abf', 'chain_build', '-b', 'master', '--no-cached-chroot', '--auto-publish', '--update-type', 'enhancement', 'openmandriva/{}'.format(package)], cwd = home + '/' + package)
+        subprocess.check_call(['abf', 'chain_build', '-b', project_version, '--no-cached-chroot', '--auto-publish'], cwd = home + '/' + package)
     except subprocess.CalledProcessError as e:
         print_log('abf build [{}] failed'.format(package), 'update.log')
         print(e)
         return False
-
 
 def qt5_check(upstream_url):
     split_url = upstream_url.split("/")[:6]
@@ -513,8 +507,9 @@ def run_local_builder(package, project_version, omv_version, upstream_version):
     try:
         print('run local build with abf tool')
         subprocess.check_call(['spectool', '--get-files', package + '.spec'], cwd = home + '/' + package)
+        print('run abf mock')
         subprocess.check_call(['abf', 'mock'], cwd = home + '/' + package)
-    except subprocess.CalledProcessError as e:
+    except Exception as e:
         print_log('local build [{}] failed, omv_version: {} upstream: {}'.format(package, omv_version, upstream_version), 'update.log')
         print(e)
         sys.exit(1)
@@ -532,17 +527,17 @@ if __name__ == '__main__':
         with open(args.file) as file:
              for line in file:
 
-                 # clear lists
-                 del nvss[:]
-                 del nvs[:]
-                 print(line.strip())
-                 package = line.strip()
-                 check_version(package)
-                 try:
-                     print('update_spec')
-                     update_spec(package)
-                 except:
-                     pass
+                # clear lists
+                del nvss[:]
+                del nvs[:]
+                print(line.strip())
+                package = line.strip()
+                check_version(package)
+                try:
+                    print('update_spec')
+                    update_spec(package)
+                except:
+                    pass
 
     if args.package is not None:
         packages = [i for i in args.package if i is not None]
