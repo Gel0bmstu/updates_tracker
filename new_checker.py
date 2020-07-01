@@ -325,7 +325,7 @@ def remove_if_exist(path):
                 return
 
 def clone_repo(package, project_version):
-    print('Clonin repo into {}'.format(home + '/' + package))
+    print('Cloning repo into {}'.format(home + '/' + package))
     remove_if_exist(home + '/' + package)
     tries = 5
     git_repo = 'https://abf.io/import/{}.git'.format(package)
@@ -456,6 +456,7 @@ def update_spec(package):
            print('linting passed')
            print('update required')
            # find current version
+           print('try to update spec')
            clone_repo(package, project_version)
            version_pattern = 'Version:\w*(.*)'
            specname = home + '/' + package + '/' + package + '.spec'
@@ -491,7 +492,8 @@ def update_spec(package):
                git_commit('version autoupdate [{}]'.format(upstream_version), package)
                git_push(package)
                abf_build(package)
-    except:
+    except Exception as e:
+        print('Unable to update spec: {}'.format(e))
         pass
 
 def print_log(message, log):
