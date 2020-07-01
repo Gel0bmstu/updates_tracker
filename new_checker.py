@@ -493,6 +493,7 @@ def update_spec(package):
                git_commit('version autoupdate [{}]'.format(upstream_version), package)
                git_push(package)
                abf_build(package)
+               remove_if_exist(home + '/' + package)
     except Exception as e:
         print('Unable to update spec: {}'.format(e))
         pass
