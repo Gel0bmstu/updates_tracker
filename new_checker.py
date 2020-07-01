@@ -160,7 +160,7 @@ def any_other(upstream_url, package):
 
 def check_version(package):
     print('checking Rosa-2019.1 ingit version for package [{}]'.format(package))
-    url = "https://abf.io/olegsolovev/{package}/raw/rosa2019.1/{package}.spec".format(package=package)
+    url = "https://abf.io/import/{package}/raw/rosa2019.1/{package}.spec".format(package=package)
     resp = requests.get(url, headers=headers)
     temp = tempfile.NamedTemporaryFile(prefix=package, suffix=".spec")
     if resp.status_code == 404:
@@ -329,7 +329,7 @@ def clone_repo(package, project_version):
     print('Cloning repo into {}'.format(path_to_package_dir))
     remove_if_exist(path_to_package_dir)
     tries = 5
-    git_repo = 'https://abf.io/import/{}.git'.format(package)
+    git_repo = 'git@abf.io:import/{}.git'.format(package)
     for i in range(tries):
         try:
           print('cloning [{}], branch: [{}] to [{}]'.format(git_repo, project_version, package))
