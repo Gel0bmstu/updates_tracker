@@ -367,7 +367,7 @@ def lint_version(version):
 
 def git_commit(message, package):
     try:
-        subprocess.check_call(['git', 'commit', '-am', '{}'.format(message)], cwd = home + '/' + package)
+        subprocess.check_call(['abf', 'put', '-m', '{}'.format(message)], cwd = home + '/' + package)
     except subprocess.CalledProcessError as e:
         print('Unable to commit changes: {}'.format(e))
         sys.exit(1)
@@ -491,7 +491,7 @@ def update_spec(package):
            if run_local_builder(package, project_version, omv_version, upstream_version) is True:
                upload_sources(package)
                git_commit('version autoupdate [{}]'.format(upstream_version), package)
-               git_push(package)
+            #    git_push(package)
                abf_build(package)
     except Exception as e:
         print('Unable to update spec: {}'.format(e))
