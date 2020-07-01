@@ -392,7 +392,7 @@ def upload_sources(package):
 
 def abf_build(package):
     try:
-        subprocess.check_call(['abf', 'chain_build', '-b', project_version, '--no-cached-chroot', '--auto-publish'], cwd = home + '/' + package)
+        subprocess.check_call(['abf', 'build', '--no-cached-chroot', '--auto-publish'], cwd = home + '/' + package)
     except subprocess.CalledProcessError as e:
         print_log('abf build [{}] failed: {}'.format(package, e), 'update.log')
         print(e)
