@@ -442,59 +442,57 @@ def qt5_check(upstream_url):
 
 def update_spec(package):
     pkg_status = compare_versions(package)
-    # status = pkg_status['status']
+    status = pkg_status['status']
     upstream_version = pkg_status['upstream_version']
-    # omv_version = pkg_status['omv_version']
-    # if 'archive' in pkg_status:
-    #     new_source0 = pkg_status['archive']
-    #     print(new_source0)
-    # else:
-    #     new_source0 = None
-    # output = '/tmp/' + package + '.spec'
-    # remove_if_exist(output)
-    # try:
-    #    if lint_version(upstream_version) is False and status == 'outdated':
-    #        print('linting passed')
-    #        print('update required')
-    #        # find current version
-    #        print('try to update spec')
-    #        clone_repo(package, project_version)
-    #        version_pattern = 'Version:\w*(.*)'
-    #        specname = home + '/' + package + '/' + package + '.spec'
-        #    with open(specname) as f:
-        #        for line in f:
-        #            change_version = re.sub(version_pattern, 'Version:\t' + upstream_version, line)
-        #            with open(output, 'a') as outfile:
-        #                outfile.write(change_version)
-        #        target_spec = home + '/' + package + '/' + package + '.spec'
-        #        shutil.move(output, target_spec)
-
-        #    with open(specname) as f:
-        #        for line in f:
-        #            release_pattern = 'Release:\W(.*)'
-        #            change_release = re.sub(release_pattern, 'Release:\t' + '1', line)
-        #            with open(output, 'a') as outfile:
-        #                outfile.write(change_release)
-        #        target_spec = home + '/' + package + '/' + package + '.spec'
-        #        shutil.move(output, target_spec)
-
-        #    # related to python packages
-        #    if new_source0 is not None:
-        #        source_pattern = 'Source0:\W*(.*)'
-        #        with open(specname) as f:
-        #            for line in f:
-        #                change_source = re.sub(source_pattern, 'Source0:\t' + new_source0, line)
-        #                with open(output, 'a') as outfile:
-        #                    outfile.write(change_source)
-        #            target_spec = home + '/' + package + '/' + package + '.spec'
-        #            shutil.move(output, target_spec)
-        #    if run_local_builder(package, project_version, omv_version, upstream_version) is True:
-        #        upload_sources(package)
-        #        git_commit('version autoupdate [{}]'.format(upstream_version), package)
-        #     #    git_push(package)
-        #        abf_build(package)
+    omv_version = pkg_status['omv_version']
+    if 'archive' in pkg_status:
+        new_source0 = pkg_status['archive']
+        print(new_source0)
+    else:
+        new_source0 = None
+    output = '/tmp/' + package + '.spec'
+    remove_if_exist(output)
     try:
-        git_commit('version autoupdate [{}]'.format(upstream_version), package)   
+       if lint_version(upstream_version) is False and status == 'outdated':
+           print('linting passed')
+           print('update required')
+           # find current version
+           print('try to update spec')
+           clone_repo(package, project_version)
+           version_pattern = 'Version:\w*(.*)'
+           specname = home + '/' + package + '/' + package + '.spec'
+           with open(specname) as f:
+               for line in f:
+                   change_version = re.sub(version_pattern, 'Version:\t' + upstream_version, line)
+                   with open(output, 'a') as outfile:
+                       outfile.write(change_version)
+               target_spec = home + '/' + package + '/' + package + '.spec'
+               shutil.move(output, target_spec)
+
+           with open(specname) as f:
+               for line in f:
+                   release_pattern = 'Release:\W(.*)'
+                   change_release = re.sub(release_pattern, 'Release:\t' + '1', line)
+                   with open(output, 'a') as outfile:
+                       outfile.write(change_release)
+               target_spec = home + '/' + package + '/' + package + '.spec'
+               shutil.move(output, target_spec)
+
+           # related to python packages
+           if new_source0 is not None:
+               source_pattern = 'Source0:\W*(.*)'
+               with open(specname) as f:
+                   for line in f:
+                       change_source = re.sub(source_pattern, 'Source0:\t' + new_source0, line)
+                       with open(output, 'a') as outfile:
+                           outfile.write(change_source)
+                   target_spec = home + '/' + package + '/' + package + '.spec'
+                   shutil.move(output, target_spec)
+           if run_local_builder(package, project_version, omv_version, upstream_version) is True:
+               upload_sources(package)
+               git_commit('version autoupdate [{}]'.format(upstream_version), package)
+            #    git_push(package)
+               abf_build(package)
     except Exception as e:
         print('Unable to update spec: {}'.format(e))
         pass
